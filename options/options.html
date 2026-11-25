@@ -15,17 +15,21 @@
       </p>
 
       <form id="form">
+        <h2>Streameur Twitch</h2>
+        <p class="lede" id="streamer-prompt">
+          Ajoute un streameur par son ID Twitch pour charger ses émotes 7TV.
+        </p>
         <label>
-          ID utilisateur Twitch (numérique)
-          <input name="twitchUserId" type="text" required pattern="\d+" />
-          <span class="hint"
-            >Doflamingoh : <code>74397555</code> (chaîne <code>dofla</code>)</span
-          >
-        </label>
-
-        <label>
-          Login Twitch (info)
-          <input name="twitchLogin" type="text" />
+          ID Twitch
+          <input
+            name="twitchUserId"
+            type="text"
+            inputmode="numeric"
+            pattern="\d*"
+            placeholder="ID numérique"
+            autocomplete="off"
+          />
+          <span class="hint">Identifiant numérique du compte Twitch. Vide : émotes 7TV globales seulement.</span>
         </label>
 
         <label class="row">
@@ -58,13 +62,7 @@
           <li><strong>Chrome / Brave / Edge / Opera</strong> : <code>chrome://extensions</code> → mode développeur → « Charger l’extension non empaquetée »</li>
           <li><strong>Safari (Mac/iPhone)</strong> : projet Xcode avec « Web Extension » (empaquetage séparé)</li>
         </ul>
-        <p>
-          Page créateur :
-          <a href="https://www.patreon.com/cw/Doflamingoh" target="_blank" rel="noopener"
-            >patreon.com/cw/Doflamingoh</a
-          >
-          — pendant un live, ouvrez le live dans le navigateur (pas l’app mobile Patreon).
-        </p>
+        <p>Pendant un live, ouvrez la page du live dans le navigateur (pas l’app mobile Patreon).</p>
       </section>
     </main>
     <script src="options.js"></script>

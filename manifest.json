@@ -40,7 +40,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "patreon-live-chat-7tv@doflamingoh.local",
+      "id": "patreon-live-chat@extension.local",
       "strict_min_version": "109.0"
     }
   }

@@ -1,9 +1,10 @@
 const GLOBAL_SET_URL = 'https://7tv.io/v3/emote-sets/global';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 
+/** Aucune chaîne n'est préremplie : l'ID Twitch se choisit dans les options. */
 const DEFAULT_SETTINGS = {
-  twitchUserId: '74397555',
-  twitchLogin: 'dofla',
+  twitchUserId: '',
+  twitchLogin: '',
   includeGlobalEmotes: true,
   emoteSize: 28,
   caseSensitiveEmotes: false,
@@ -46,14 +47,18 @@ async function fetchJson(url) {
 }
 
 async function loadEmoteMaps(settings) {
-  const channelUrl = `https://7tv.io/v3/users/twitch/${encodeURIComponent(settings.twitchUserId)}`;
-  const user = await fetchJson(channelUrl);
   let channel = new Map();
-  if (user?.emote_set?.emotes) {
-    channel = parseEmoteSet(user.emote_set);
-  } else if (user?.emote_set?.id) {
-    const set = await fetchJson(`https://7tv.io/v3/emote-sets/${user.emote_set.id}`);
-    channel = parseEmoteSet(set);
+  let twitchLogin = '';
+  const twitchUserId = String(settings.twitchUserId || '').trim();
+  if (/^\d+$/.test(twitchUserId)) {
+    const user = await fetchJson(`https://7tv.io/v3/users/twitch/${encodeURIComponent(twitchUserId)}`);
+    if (user?.emote_set?.emotes) {
+      channel = parseEmoteSet(user.emote_set);
+    } else if (user?.emote_set?.id) {
+      const set = await fetchJson(`https://7tv.io/v3/emote-sets/${user.emote_set.id}`);
+      channel = parseEmoteSet(set);
+    }
+    twitchLogin = user?.username || '';
   }
 
   let globalMap = new Map();
@@ -66,8 +71,18 @@ async function loadEmoteMaps(settings) {
     channel: Object.fromEntries(channel),
     global: Object.fromEntries(globalMap),
     fetchedAt: Date.now(),
-    twitchLogin: user?.username ?? settings.twitchLogin,
+    twitchLogin,
   };
+}
+
+/** Ouvre les options une fois, tant qu'aucun ID Twitch n'est enregistré. */
+async function offerStreamerOnce() {
+  const stored = await chrome.storage.sync.get('twitchUserId');
+  if (stored.twitchUserId) return;
+  const seen = await chrome.storage.local.get('p7tv-streamer-prompt');
+  if (seen['p7tv-streamer-prompt']) return;
+  await chrome.storage.local.set({ 'p7tv-streamer-prompt': true });
+  chrome.runtime.openOptionsPage();
 }
 
 async function getSettings() {
@@ -101,10 +116,12 @@ async function refreshCache(force = false) {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
+  offerStreamerOnce();
   refreshCache(true).catch(() => {});
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  offerStreamerOnce();
   refreshCache(false).catch(() => {});
 });
 

@@ -1,6 +1,5 @@
 const DEFAULTS = {
-  twitchUserId: '74397555',
-  twitchLogin: 'dofla',
+  twitchUserId: '',
   includeGlobalEmotes: true,
   emoteSize: 28,
   caseSensitiveEmotes: false,
@@ -10,6 +9,14 @@ const form = document.getElementById('form');
 const statusEl = document.getElementById('status');
 const refreshBtn = document.getElementById('refresh');
 
+const promptEl = document.getElementById('streamer-prompt');
+
+function paintPrompt(id) {
+  promptEl.textContent = id
+    ? `ID Twitch enregistré : ${id}. Un autre ID remplace ce streameur.`
+    : 'Ajoute un streameur par son ID Twitch pour charger ses émotes 7TV.';
+}
+
 async function load() {
   const data = await chrome.storage.sync.get(DEFAULTS);
   for (const [key, value] of Object.entries(data)) {
@@ -18,6 +25,7 @@ async function load() {
     if (field.type === 'checkbox') field.checked = Boolean(value);
     else field.value = value;
   }
+  paintPrompt(String(data.twitchUserId || '').trim());
 }
 
 function setStatus(text) {
@@ -26,15 +34,21 @@ function setStatus(text) {
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const twitchUserId = form.twitchUserId.value.trim();
   const payload = {
-    twitchUserId: form.twitchUserId.value.trim(),
-    twitchLogin: form.twitchLogin.value.trim(),
+    twitchUserId,
+    twitchLogin: '',
     includeGlobalEmotes: form.includeGlobalEmotes.checked,
     caseSensitiveEmotes: form.caseSensitiveEmotes.checked,
     emoteSize: Number(form.emoteSize.value) || 28,
   };
   await chrome.storage.sync.set(payload);
-  setStatus('Options enregistrées. Rechargez l’onglet du live Patreon.');
+  paintPrompt(twitchUserId);
+  setStatus(
+    twitchUserId
+      ? 'Streameur enregistré. Rechargez l’onglet du live Patreon.'
+      : 'Aucun streameur. Rechargez l’onglet du live : seules les émotes globales seront chargées.',
+  );
 });
 
 refreshBtn.addEventListener('click', async () => {

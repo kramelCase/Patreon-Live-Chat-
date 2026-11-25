@@ -7,8 +7,6 @@ Browser extension (WebExtension, Manifest V3) for the chat on Patreon lives in t
 - **Highlighted replies**: a message that mentions the installed user’s name is highlighted. Only people who have the extension see that highlight.
 - **7TV emotes**: viewers with the extension see the images. Everyone else sees the emote name as text.
 
-Ships with **Doflamingoh** as the default channel (Twitch `dofla`, id `74397555`). Change it in the options.
-
 ## Browsers
 
 | Browser | Install |
@@ -21,17 +19,16 @@ The Patreon mobile apps (iOS / Android) are out of scope.
 
 ## Use
 
-1. Install the extension.
-2. During a live, open the live page on **https://www.patreon.com/** in the browser.
-3. Each viewer who wants emotes and highlights needs the extension.
-
-Creator page: https://www.patreon.com/cw/Doflamingoh
+1. Install the extension. The options page opens.
+2. Add a Twitch channel by its numeric user id. That channel’s 7TV emotes are loaded. Leave the field empty for global 7TV emotes only.
+3. During a live, open the live page on **https://www.patreon.com/** in the browser.
+4. Each viewer who wants emotes and highlights needs the extension.
 
 ## Options
 
 Right-click the icon → *Manage extension* → *Preferences*, or open `options/options.html` from the extension manager.
 
-- Creator Twitch id (7TV emote set).
+- Twitch channel id. No channel is preset.
 - Global 7TV emotes on or off.
 - Emote size in pixels.
 
