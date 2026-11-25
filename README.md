@@ -3,7 +3,7 @@
 Browser extension (WebExtension, Manifest V3) for the chat on Patreon lives in the browser.
 
 - **Reply**: a control on a message, like Twitch. Clicking it writes `@name` into the chat field. Display names can contain spaces and count as one mention.
-- **Autocomplete**: typing `@` suggests people already seen in that live. 7TV emote names complete the same way (arrows, Tab, Enter). Enter inserts the suggestion and does not send the message.
+- **Autocomplete**: typing `@` suggests the people in that live chat. 7TV emote names complete the same way (arrows, Tab, Enter). Enter inserts the suggestion and does not send the message.
 - **Highlighted replies**: a message that mentions the installed user’s name is highlighted. Only people who have the extension see that highlight.
 - **7TV emotes**: viewers with the extension see the images. Everyone else sees the emote name as text.
 
