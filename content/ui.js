@@ -123,14 +123,23 @@
     });
   }
 
+  /** 28 px était le défaut précédent : trop petit dans les bulles Patreon. */
+  function emotePixelSize() {
+    const n = Number(state.settings.emoteSize);
+    if (!n || n <= 28) return 48;
+    return n;
+  }
+
   function appendEmote(frag, emote, pendingZero) {
+    const size = emotePixelSize();
     const img = document.createElement('img');
     img.className = 'p7tv-emote';
     img.src = emote.url;
     img.alt = emote.name;
     img.title = emote.name;
-    img.width = state.settings.emoteSize || 28;
-    img.height = state.settings.emoteSize || 28;
+    img.style.setProperty('--p7tv-emote-size', `${size}px`);
+    img.width = size;
+    img.height = size;
     img.loading = 'lazy';
     img.decoding = 'async';
     if (!emote.zeroWidth) {
@@ -416,5 +425,81 @@
       }
     });
     input.addEventListener('blur', () => setTimeout(destroyAutocomplete, 150));
+  };
+
+  /** Le pseudo Patreon n'est pas le login Twitch : on ne le devine pas. */
+  function hasTwitchChannel(settings) {
+    const list = Array.isArray(settings?.twitchUserIds) ? settings.twitchUserIds : [];
+    if (list.some((id) => /^\d+$/.test(String(id)))) return true;
+    return /^\d+$/.test(String(settings?.twitchUserId || ''));
+  }
+
+  function repaintEmotes() {
+    document.querySelectorAll('[data-p7tv-rendered], [data-p7tv-enhanced]').forEach((el) => {
+      el.removeAttribute('data-p7tv-rendered');
+      el.removeAttribute('data-p7tv-enhanced');
+    });
+    document.querySelectorAll('[data-tag="chat-message"]').forEach((el) => P7.renderMessage(el));
+  }
+
+  P7.ensureSetupBar = function ensureSetupBar(root) {
+    if (state.setupDismissed || hasTwitchChannel(state.settings)) {
+      document.getElementById('p7tv-setup')?.remove();
+      return;
+    }
+    const form =
+      root?.querySelector?.('[data-tag="chats-send-message-form"]') ||
+      document.querySelector('[data-tag="chats-send-message-form"]');
+    if (!form?.parentElement) return;
+    let bar = document.getElementById('p7tv-setup');
+    if (!bar) {
+      bar = document.createElement('form');
+      bar.id = 'p7tv-setup';
+      bar.innerHTML =
+        '<p>Nom Twitch, pas le pseudo Patreon.</p>' +
+        '<input type="text" name="twitch" placeholder="nom Twitch" autocomplete="off" />' +
+        '<button type="submit">Ajouter</button>' +
+        '<span class="p7tv-setup-status"></span>';
+      const status = bar.querySelector('.p7tv-setup-status');
+      bar.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const raw = bar.twitch.value.trim().replace(/^@/, '');
+        if (!raw) return;
+        status.textContent = 'Recherche…';
+        try {
+          const resolved = await chrome.runtime.sendMessage({ type: 'RESOLVE_TWITCH', query: raw });
+          if (!resolved?.ok || !resolved.data?.id) {
+            status.textContent = 'Chaîne Twitch introuvable.';
+            return;
+          }
+          const { id, label } = resolved.data;
+          const prev = await chrome.storage.sync.get({ twitchUserIds: [], twitchLabels: {} });
+          const ids = Array.isArray(prev.twitchUserIds) ? prev.twitchUserIds.map(String) : [];
+          if (!ids.includes(id)) ids.push(id);
+          const labels = { ...(prev.twitchLabels || {}), [id]: label || raw };
+          await chrome.storage.sync.set({
+            twitchUserIds: ids,
+            twitchUserId: '',
+            twitchLogin: '',
+            twitchLabels: labels,
+          });
+          state.settings = { ...state.settings, twitchUserIds: ids, twitchUserId: '' };
+          const emoteRes = await chrome.runtime.sendMessage({ type: 'GET_EMOTES', force: true });
+          if (emoteRes?.ok) {
+            state.emotes = {
+              channel: emoteRes.data.channel || {},
+              global: emoteRes.data.global || {},
+            };
+          }
+          bar.remove();
+          repaintEmotes();
+        } catch (err) {
+          status.textContent = 'Chaîne Twitch introuvable.';
+          console.warn(P7.PREFIX, err);
+        }
+      });
+    }
+    if (bar.nextElementSibling !== form) form.parentElement.insertBefore(bar, form);
   };
 })();

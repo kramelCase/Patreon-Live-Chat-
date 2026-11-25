@@ -38,6 +38,7 @@
       const root = P7.findChatRoot();
       if (!root) return;
       P7.findChatInput(root);
+      P7.ensureSetupBar(root);
       P7.collectPresentNames();
       P7.invalidateKnownMentions();
       enhanceMessages(root);

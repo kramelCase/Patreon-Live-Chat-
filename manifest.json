@@ -12,7 +12,9 @@
   "host_permissions": [
     "https://www.patreon.com/*",
     "https://7tv.io/*",
-    "https://cdn.7tv.app/*"
+    "https://cdn.7tv.app/*",
+    "https://api.ivr.fi/*",
+    "https://gql.twitch.tv/*"
   ],
   "background": {
     "scripts": ["background/service-worker.js"]

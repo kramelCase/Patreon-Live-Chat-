@@ -19,16 +19,16 @@ The Patreon mobile apps (iOS / Android) are out of scope.
 
 ## Use
 
-1. Install the extension. The options page opens.
-2. Add a Twitch channel by its numeric user id. That channel’s 7TV emotes are loaded. Leave the field empty for global 7TV emotes only.
-3. During a live, open the live page on **https://www.patreon.com/** in the browser.
+1. Install the extension.
+2. During a live, open the live page on **https://www.patreon.com/** in the browser.
+3. The chat asks for the creator’s **Twitch** name. That name is not their Patreon name. One field is enough. More channels can be added later from the extension icon.
 4. Each viewer who wants emotes and highlights needs the extension.
 
 ## Options
 
 Right-click the icon → *Manage extension* → *Preferences*, or open `options/options.html` from the extension manager.
 
-- Twitch channel id. No channel is preset.
+- Twitch channel ids, as tags. No channel is preset.
 - Global 7TV emotes on or off.
 - Emote size in pixels.
 

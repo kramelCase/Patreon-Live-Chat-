@@ -3,68 +3,144 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Patreon Live Chat+ — Options</title>
+    <title>Patreon Live Chat+</title>
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
-    <main>
-      <h1>Patreon Live Chat+</h1>
-      <p class="lede">
-        Réponses @pseudo, autocomplétion et émotes 7TV sur les lives Patreon (navigateur web).
-        Les viewers sans l’extension voient le nom texte des émotes.
-      </p>
-
-      <form id="form">
-        <h2>Streameur Twitch</h2>
-        <p class="lede" id="streamer-prompt">
-          Ajoute un streameur par son ID Twitch pour charger ses émotes 7TV.
-        </p>
-        <label>
-          ID Twitch
-          <input
-            name="twitchUserId"
-            type="text"
-            inputmode="numeric"
-            pattern="\d*"
-            placeholder="ID numérique"
-            autocomplete="off"
-          />
-          <span class="hint">Identifiant numérique du compte Twitch. Vide : émotes 7TV globales seulement.</span>
-        </label>
-
-        <label class="row">
-          <input name="includeGlobalEmotes" type="checkbox" />
-          Inclure les émotes 7TV globales
-        </label>
-
-        <label class="row">
-          <input name="caseSensitiveEmotes" type="checkbox" />
-          Noms d’émotes sensibles à la casse
-        </label>
-
-        <label>
-          Taille des émotes (px)
-          <input name="emoteSize" type="number" min="20" max="48" step="2" />
-        </label>
-
-        <p id="status" role="status"></p>
-
-        <div class="actions">
-          <button type="submit">Enregistrer</button>
-          <button type="button" id="refresh">Recharger les émotes</button>
+    <div class="app">
+      <aside>
+        <div class="brand">
+          <img src="../icons/icon-48.png" alt="" width="28" height="28" />
+          <strong>Patreon Live Chat+</strong>
         </div>
-      </form>
+        <nav aria-label="Sections">
+          <button type="button" class="tab is-active" data-tab="home" data-i18n="tabHome">Accueil</button>
+          <button type="button" class="tab" data-tab="settings" data-i18n="tabSettings">Réglages</button>
+          <button type="button" class="tab" data-tab="about" data-i18n="tabAbout">À propos</button>
+        </nav>
+        <div class="langs" role="group" aria-label="Language">
+          <button type="button" data-lang="fr">FR</button>
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="es">ES</button>
+        </div>
+      </aside>
 
-      <section class="install">
-        <h2>Installation (mode développeur)</h2>
-        <ul>
-          <li><strong>Firefox / Zen</strong> : <code>about:debugging</code> → « Charger un module temporaire » → <code>manifest.json</code></li>
-          <li><strong>Chrome / Brave / Edge / Opera</strong> : <code>chrome://extensions</code> → mode développeur → « Charger l’extension non empaquetée »</li>
-          <li><strong>Safari (Mac/iPhone)</strong> : projet Xcode avec « Web Extension » (empaquetage séparé)</li>
-        </ul>
-        <p>Pendant un live, ouvrez la page du live dans le navigateur (pas l’app mobile Patreon).</p>
-      </section>
-    </main>
+      <main>
+        <form id="form">
+          <section data-panel="home">
+            <h1 data-i18n="homeTitle">Le chat du live</h1>
+            <p class="lede" data-i18n="homeLede">
+              Ces ajouts au chat des lives Patreon ne sont visibles que pour toi.
+            </p>
+            <div class="features">
+              <article class="feature">
+                <h2 data-i18n="featReply">Répondre</h2>
+                <p data-i18n="featReplyText">Clique sur le pseudo d’un message : un bouton Répondre apparaît. Il écrit dans le champ @ suivi du nom complet, même s’il contient des espaces.</p>
+              </article>
+              <article class="feature">
+                <h2 data-i18n="featAt">Autocomplétion</h2>
+                <p data-i18n="featAtText">En tapant @ puis quelques lettres, tu vois les personnes présentes dans le chat. La touche Entrée insère le nom choisi, sans envoyer le message.</p>
+              </article>
+              <article class="feature">
+                <h2 data-i18n="featGlow">Mise en avant</h2>
+                <p data-i18n="featGlowText">Les messages qui te répondent sont mis en avant. Les autres restent tels quels.</p>
+              </article>
+              <article class="feature">
+                <h2 data-i18n="featEmotes">Émotes 7TV</h2>
+                <p data-i18n="featEmotesText">Les noms d’émotes 7TV s’affichent en image. Les spectateurs qui n’ont pas l’extension continuent de voir le texte.</p>
+              </article>
+            </div>
+          </section>
+
+          <section data-panel="settings" hidden>
+            <h1 data-i18n="guideTitle">Utiliser le chat</h1>
+            <ol class="steps">
+              <li>
+                <div>
+                  <h2 data-i18n="step1">Ajouter les émotes 7TV d’un streameur Twitch</h2>
+                  <p class="hint" data-i18n="step1hint">
+                    Écris le nom de sa chaîne Twitch, pas son pseudo Patreon. Ses émotes s’ajoutent au chat. Tu peux en ajouter plusieurs.
+                  </p>
+                  <p class="hint" id="streamer-prompt"></p>
+                  <div class="tag-add">
+                    <div class="tag-field">
+                      <input id="streamer-input" type="text" autocomplete="off" placeholder="nom Twitch" role="combobox" aria-autocomplete="list" aria-expanded="false" />
+                      <div class="suggest" id="streamer-suggest" hidden></div>
+                    </div>
+                    <button type="button" id="streamer-add" data-i18n="add">Ajouter</button>
+                  </div>
+                  <div class="tags" id="streamer-tags"></div>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <h2 data-i18n="step2">Recharger la page du live pour les voir</h2>
+                  <p class="hint" data-i18n="step2hint">
+                    Recharge la page Patreon du live. Les émotes, Répondre et les suggestions apparaissent alors. Personne d’autre ne les voit.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <h2 data-i18n="step3">Choisir la taille et parcourir les émotes</h2>
+                  <p class="hint" data-i18n="step3hint">Règle la taille affichée dans le chat, vérifie l’aperçu, puis ouvre la liste de chaque streameur ou les émotes globales.</p>
+            <label class="slider-label">
+              <span data-i18n="emoteSize">Taille dans le chat</span>
+              <span class="slider">
+                <input name="emoteSize" type="range" min="32" max="96" step="2" value="48" />
+                <output id="emote-size-value">48 px</output>
+              </span>
+            </label>
+            <p class="hint" data-i18n="previewHint">C’est la taille affichée dans le chat. Recharge la page du live pour l’appliquer.</p>
+            <label class="row">
+              <input name="includeGlobalEmotes" type="checkbox" checked />
+              <span data-i18n="globalEmotes">Ajouter aussi les émotes 7TV globales</span>
+            </label>
+            <label class="row">
+              <input name="caseSensitiveEmotes" type="checkbox" />
+              <span data-i18n="caseSensitive">Respecter les majuscules dans les noms d’émotes</span>
+            </label>
+            <div class="stage" id="emote-preview">
+              <span data-i18n="previewBefore">Salut</span>
+              <img id="preview-img" alt="" hidden />
+              <span class="ph" id="preview-ph" aria-hidden="true">7TV</span>
+              <span data-i18n="previewAfter">tout le monde</span>
+            </div>
+            <div class="view-switch" role="group">
+              <button type="button" data-view="channel" class="is-active" data-i18n="viewStreamers">Par streameur</button>
+              <button type="button" data-view="global" data-i18n="viewGlobal">Émotes globales</button>
+            </div>
+            <label class="filter">
+              <span data-i18n="filter">Filtrer</span>
+              <input id="emote-filter" type="search" autocomplete="off" />
+            </label>
+            <div id="gallery"></div>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section data-panel="about" hidden>
+            <h1 data-i18n="tabAbout">À propos</h1>
+            <p class="lede" data-i18n="aboutLede">
+              Réponses, autocomplétion et émotes 7TV sur les lives Patreon ouverts dans le navigateur.
+            </p>
+            <ul class="about">
+              <li data-i18n="aboutFirefox">
+                Firefox / Zen : about:debugging → charger un module temporaire → manifest.json
+              </li>
+              <li data-i18n="aboutChrome">
+                Chrome, Edge et Opera demandent une variante dont l’arrière-plan est un service worker.
+              </li>
+              <li data-i18n="aboutSafari">Safari demande un projet Xcode « Safari Web Extension », sur un Mac.</li>
+              <li data-i18n="aboutLive">Pendant un live, ouvre la page du live dans le navigateur, pas l’application mobile.</li>
+            </ul>
+          </section>
+
+          <p id="status" role="status"></p>
+        </form>
+      </main>
+    </div>
     <script src="options.js"></script>
   </body>
 </html>

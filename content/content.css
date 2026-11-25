@@ -53,7 +53,11 @@ img.p7tv-emote {
   display: inline-block;
   vertical-align: middle;
   object-fit: contain;
-  margin: 0 1px;
+  width: var(--p7tv-emote-size, 48px) !important;
+  height: var(--p7tv-emote-size, 48px) !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 2px;
 }
 
 img.p7tv-emote-zw {
@@ -97,4 +101,49 @@ img.p7tv-emote-zw {
 .p7tv-ac-item.is-active,
 .p7tv-ac-item:hover {
   background: color-mix(in srgb, AccentColor 22%, transparent);
+}
+
+#p7tv-setup {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #1c1c21;
+  color: #f4f4f5;
+  font: 13px/1.35 system-ui, sans-serif;
+}
+
+#p7tv-setup p {
+  margin: 0;
+  flex: 1 1 180px;
+}
+
+#p7tv-setup input {
+  flex: 1 1 120px;
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #3a3a42;
+  background: #101012;
+  color: #f4f4f5;
+  font: inherit;
+}
+
+#p7tv-setup button {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 0;
+  background: #ff424d;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+#p7tv-setup .p7tv-setup-status {
+  flex: 1 1 100%;
+  color: #a1a1aa;
+  font-size: 12px;
 }
