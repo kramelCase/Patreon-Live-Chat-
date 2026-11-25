@@ -1,68 +1,66 @@
 # Patreon Live Chat+
 
-Extension navigateur (WebExtension Manifest V3) qui améliore le **chat des lives Patreon** sur le web :
+Browser extension (WebExtension, Manifest V3) for the chat on Patreon lives in the browser.
 
-- **Répondre** : bouton au survol d’un message, comme sur Twitch. Le clic écrit `@pseudo` dans le champ du chat.
-- **Autocomplétion** : taper `@` puis le début d’un pseudo propose les personnes déjà vues dans le chat. Les noms d’émotes 7TV se complètent aussi (flèches, Tab, Entrée).
-- **Réponses surlignées** : un message qui contient `@pseudo` est surligné, avec la mention mise en évidence. Seuls les viewers qui ont l’extension voient ce surlignage.
-- **Émotes 7TV** : affichage des images pour les viewers qui ont l’extension (les autres voient le texte).
+- **Reply**: a control on a message, like Twitch. Clicking it writes `@name` into the chat field. Display names can contain spaces and count as one mention.
+- **Autocomplete**: typing `@` suggests people already seen in that live. 7TV emote names complete the same way (arrows, Tab, Enter). Enter inserts the suggestion and does not send the message.
+- **Highlighted replies**: a message that mentions the installed user’s name is highlighted. Only people who have the extension see that highlight.
+- **7TV emotes**: viewers with the extension see the images. Everyone else sees the emote name as text.
 
-Préconfigurée pour **Doflamingoh** (Twitch `dofla`, ID `74397555`). Modifiable dans les options.
+Ships with **Doflamingoh** as the default channel (Twitch `dofla`, id `74397555`). Change it in the options.
 
-## Navigateurs
+## Browsers
 
-| Navigateur | Installation |
-|------------|----------------|
-| Firefox, Zen | `about:debugging` → *Charger un module complémentaire temporaire* → choisir `manifest.json` |
-| Chrome, Brave, Edge, Opera | `chrome://extensions` (ou équivalent) → mode développeur → *Charger l’extension non empaquetée* |
-| Safari (Mac / iPhone) | Nécessite un empaquetage Xcode « Safari Web Extension » à partir des mêmes sources (hors périmètre automatique de ce dépôt) |
+| Browser | Install |
+| --- | --- |
+| Firefox, Zen | `about:debugging` → *Load Temporary Add-on* → select `manifest.json` |
+| Chrome, Brave, Edge, Opera | Needs a build whose background is a `service_worker`. This repository’s manifest targets Firefox (`background.scripts`). |
+| Safari (Mac / iPhone) | Needs an Xcode “Safari Web Extension” project built from these sources. |
 
-**Hors périmètre** : application mobile Patreon (iOS / Android).
+The Patreon mobile apps (iOS / Android) are out of scope.
 
-## Utilisation
+## Use
 
-1. Installez l’extension en mode développeur.
-2. Pendant un live, ouvrez la page du live sur **https://www.patreon.com/** dans le navigateur (pas l’app).
-3. Chaque viewer qui veut voir les émotes doit installer l’extension.
+1. Install the extension.
+2. During a live, open the live page on **https://www.patreon.com/** in the browser.
+3. Each viewer who wants emotes and highlights needs the extension.
 
-Page créateur Doflamingoh : https://www.patreon.com/cw/Doflamingoh
-
-Les URLs de live varient (fil d’actualité, notification, lien partagé par le créateur). **Envoyez le lien direct du live** pendant qu’il est en cours pour affiner les sélecteurs DOM si Patreon met à jour l’interface.
+Creator page: https://www.patreon.com/cw/Doflamingoh
 
 ## Options
 
-Clic droit sur l’icône → *Gérer l’extension* → *Préférences*, ou ouvrez `options/options.html` depuis le gestionnaire d’extensions.
+Right-click the icon → *Manage extension* → *Preferences*, or open `options/options.html` from the extension manager.
 
-- ID Twitch du créateur (pour charger le set 7TV).
-- Émotes globales 7TV oui/non.
-- Taille des émotes en pixels.
+- Creator Twitch id (7TV emote set).
+- Global 7TV emotes on or off.
+- Emote size in pixels.
 
-## Limites connues
+## Limits
 
-- Les **réponses threadées** visibles par tous ne sont pas possibles sans support natif de Patreon (chat type GetStream).
-- Les **émotes** ne s’affichent en image que pour les utilisateurs avec l’extension ; le message envoyé reste du texte (`NomEmote`).
-- Les sélecteurs du chat Patreon peuvent changer ; l’extension utilise plusieurs repli (`str-chat`, zones de texte du live).
+- Threaded replies visible to everyone need native Patreon support (the chat is backed by GetStream).
+- Sent messages stay plain text. Emote images are rendered locally by the extension.
+- Patreon’s chat markup changes. The extension matches stable `data-tag` attributes and a few class suffixes.
 
-## Développement
+## Development
 
-Les content scripts partagent l'objet `globalThis.P7` et sont chargés dans cet ordre :
+Content scripts share `globalThis.P7` and load in this order:
 
-- `content/core.js` — sélecteurs DOM, normalisation des pseudos
-- `content/roster.js` — annuaire du live et compte connecté
-- `content/mentions.js` — reconnaissance de `@pseudo`, y compris avec des espaces
-- `content/ui.js` — Répondre, surlignage, émotes, autocomplétion
-- `content/main.js` — observation du chat
-- `content/page-names.js` — lecture des pseudos dans React (monde de la page)
+- `content/core.js` — DOM selectors, display-name normalization
+- `content/roster.js` — people in the live, and the signed-in account
+- `content/mentions.js` — `@name` matching, including names with spaces
+- `content/ui.js` — reply, highlight, emotes, autocomplete
+- `content/main.js` — chat observer
+- `content/page-names.js` — display names read from React, in the page world
 
-`P7.TEST_HIGHLIGHT_ALL` dans `core.js` : `false` en production (seule une citation de soi allume la bulle), `true` pour allumer chaque pseudo cité.
+`P7.TEST_HIGHLIGHT_ALL` in `core.js`: `false` in production (only a mention of the signed-in user highlights the bubble), `true` to highlight every cited name.
 
-Le reste :
+Also:
 
-- `manifest.json` — configuration MV3
-- `background/service-worker.js` — cache API 7TV (`7tv.io`, `cdn.7tv.app`)
-- `content/content.css` — styles injectés
-- `options/` — page de réglages
+- `manifest.json` — MV3 configuration
+- `background/service-worker.js` — 7TV API cache (`7tv.io`, `cdn.7tv.app`)
+- `content/content.css` — injected styles
+- `options/` — settings page
 
-## Licence
+## License
 
-MIT (projet communautaire non affilié à Patreon, Twitch ou 7TV).
+MIT. Community project, not affiliated with Patreon, Twitch, or 7TV.
