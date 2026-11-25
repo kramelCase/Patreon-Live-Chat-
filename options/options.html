@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patreon Live Chat+ — Options</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Patreon Live Chat+</h1>
+      <p class="lede">
+        Réponses @pseudo, autocomplétion et émotes 7TV sur les lives Patreon (navigateur web).
+        Les viewers sans l’extension voient le nom texte des émotes.
+      </p>
+
+      <form id="form">
+        <label>
+          ID utilisateur Twitch (numérique)
+          <input name="twitchUserId" type="text" required pattern="\d+" />
+          <span class="hint"
+            >Doflamingoh : <code>74397555</code> (chaîne <code>dofla</code>)</span
+          >
+        </label>
+
+        <label>
+          Login Twitch (info)
+          <input name="twitchLogin" type="text" />
+        </label>
+
+        <label class="row">
+          <input name="includeGlobalEmotes" type="checkbox" />
+          Inclure les émotes 7TV globales
+        </label>
+
+        <label class="row">
+          <input name="caseSensitiveEmotes" type="checkbox" />
+          Noms d’émotes sensibles à la casse
+        </label>
+
+        <label>
+          Taille des émotes (px)
+          <input name="emoteSize" type="number" min="20" max="48" step="2" />
+        </label>
+
+        <p id="status" role="status"></p>
+
+        <div class="actions">
+          <button type="submit">Enregistrer</button>
+          <button type="button" id="refresh">Recharger les émotes</button>
+        </div>
+      </form>
+
+      <section class="install">
+        <h2>Installation (mode développeur)</h2>
+        <ul>
+          <li><strong>Firefox / Zen</strong> : <code>about:debugging</code> → « Charger un module temporaire » → <code>manifest.json</code></li>
+          <li><strong>Chrome / Brave / Edge / Opera</strong> : <code>chrome://extensions</code> → mode développeur → « Charger l’extension non empaquetée »</li>
+          <li><strong>Safari (Mac/iPhone)</strong> : projet Xcode avec « Web Extension » (empaquetage séparé)</li>
+        </ul>
+        <p>
+          Page créateur :
+          <a href="https://www.patreon.com/cw/Doflamingoh" target="_blank" rel="noopener"
+            >patreon.com/cw/Doflamingoh</a
+          >
+          — pendant un live, ouvrez le live dans le navigateur (pas l’app mobile Patreon).
+        </p>
+      </section>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>

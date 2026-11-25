@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Patreon Live Chat+",
+  "version": "0.1.2",
+  "description": "Bouton Répondre, autocomplétion @pseudo, réponses surlignées et émotes 7TV sur les lives Patreon.",
+  "default_locale": "fr",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://www.patreon.com/*",
+    "https://7tv.io/*",
+    "https://cdn.7tv.app/*"
+  ],
+  "background": {
+    "scripts": ["background/service-worker.js"]
+  },
+    "content_scripts": [
+    {
+      "matches": ["https://www.patreon.com/*"],
+      "js": ["content/page-names.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://www.patreon.com/*"],
+      "js": ["content/core.js", "content/roster.js", "content/mentions.js", "content/ui.js", "content/main.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "Patreon Live Chat+ — voir les options"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "patreon-live-chat-7tv@doflamingoh.local",
+      "strict_min_version": "109.0"
+    }
+  }
+}

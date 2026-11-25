@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mock chat Patreon</title>
+    <link rel="stylesheet" href="../content/content.css" />
+    <style>
+      body { font: 15px/1.4 system-ui, sans-serif; background: #141416; color: #f4f4f5; margin: 0; }
+      main { max-width: 420px; margin: 24px auto; }
+      .str-chat { display: flex; flex-direction: column; gap: 10px; }
+      .str-chat__li { padding: 8px 10px; }
+      .str-chat__message-sender-name { display: block; font-size: 13px; }
+      textarea { width: 100%; min-height: 64px; margin-top: 12px; }
+      #probe { margin-top: 12px; font-size: 13px; color: #d4d4d8; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <video class="str-video__video"></video>
+      <div class="str-chat">
+        <div class="str-chat__li" role="listitem">
+          <strong class="str-chat__message-sender-name">Alice</strong>
+          <div class="str-chat__message-text">Salut tout le monde</div>
+        </div>
+        <div class="str-chat__li" role="listitem">
+          <strong class="str-chat__message-sender-name">Bob</strong>
+          <div class="str-chat__message-text">@Alice bien vu</div>
+        </div>
+        <textarea class="str-chat__textarea" placeholder="Envoyer un message"></textarea>
+      </div>
+      <p id="probe"></p>
+    </main>
+    <script>
+      window.chrome = {
+        runtime: {
+          sendMessage() {
+            return Promise.resolve({ ok: true, data: { channel: {}, global: {}, emoteSize: 28 } });
+          },
+        },
+      };
+    </script>
+    <script src="../content/main.js"></script>
+  </body>
+</html>
