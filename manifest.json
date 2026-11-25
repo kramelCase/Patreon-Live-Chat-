@@ -42,7 +42,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "patreon-live-chat@extension.local",
+      "id": "patreon-live-chat@kramelcase.github.io",
       "strict_min_version": "109.0"
     }
   }

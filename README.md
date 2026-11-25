@@ -61,3 +61,5 @@ Also:
 ## License
 
 MIT. Community project, not affiliated with Patreon, Twitch, or 7TV.
+
+Privacy policy: [PRIVACY.md](PRIVACY.md).
