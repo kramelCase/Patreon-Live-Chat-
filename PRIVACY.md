@@ -40,6 +40,8 @@ Requests go straight from your browser to these sites. They do not pass through 
 
 The extension does not add its own calls to Patreon. It only changes the Patreon page already open in the tab.
 
+The Firefox listing states that the extension does not collect or transmit personal data. A channel lookup sends only the Twitch name you type to Twitch and 7TV. Chat text, display names, and the signed-in account stay in the browser.
+
 ## What this project does not do
 
 - no analytics and no advertising
