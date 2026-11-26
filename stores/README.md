@@ -10,4 +10,6 @@ Une boutique = un dossier. On coche au fur et à mesure. La ligne **En ligne** n
 | Opera Addons | [opera](opera/TODO.md) | même paquet que Chrome | non |
 | Safari | [safari](safari/TODO.md) | projet Xcode | non |
 
+Les paquets se construisent avec `powershell -ExecutionPolicy Bypass -File scripts/build.ps1`, qui écrit dans `dist/`.
+
 Le code chargé par Firefox au quotidien reste à la racine du dépôt. Les dossiers ci-dessous servent au suivi et, plus tard, aux paquets envoyés aux boutiques.
