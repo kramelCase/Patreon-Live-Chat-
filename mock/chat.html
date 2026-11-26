@@ -30,15 +30,7 @@
       </div>
       <p id="probe"></p>
     </main>
-    <script>
-      window.chrome = {
-        runtime: {
-          sendMessage() {
-            return Promise.resolve({ ok: true, data: { channel: {}, global: {}, emoteSize: 48 } });
-          },
-        },
-      };
-    </script>
+    <script src="chrome-stub.js"></script>
     <script src="../content/main.js"></script>
   </body>
 </html>

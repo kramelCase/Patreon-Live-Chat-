@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Patreon Live Chat+",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Bouton Répondre, autocomplétion @pseudo, réponses surlignées et émotes 7TV sur les lives Patreon.",
   "default_locale": "fr",
   "icons": {
@@ -43,7 +43,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "patreon-live-chat@kramelcase.github.io",
-      "strict_min_version": "109.0",
+      "strict_min_version": "142.0",
       "data_collection_permissions": {
         "required": ["none"]
       }
