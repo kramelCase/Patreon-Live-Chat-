@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Capture boutique</title>
+    <link rel="stylesheet" href="../../content/content.css" />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 1280px; height: 800px; overflow: hidden; }
+      body {
+        display: flex;
+        align-items: center;
+        gap: 64px;
+        padding: 0 72px;
+        font: 16px/1.45 system-ui, "Segoe UI", sans-serif;
+        color: #f4f4f5;
+        background: radial-gradient(circle at 20% 30%, #3a1d22 0, #141416 55%);
+        color-scheme: dark;
+      }
+      .pitch { flex: 1; }
+      .pitch h1 { margin: 0 0 12px; font-size: 44px; line-height: 1.1; }
+      .pitch h1 span { color: #ff424d; }
+      .pitch p { margin: 0 0 28px; color: #c4c4cc; font-size: 19px; max-width: 470px; }
+      .pitch ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+      .pitch li { display: flex; gap: 12px; align-items: baseline; font-size: 18px; }
+      .pitch li b { color: #ff424d; }
+      .chat {
+        position: relative;
+        width: 500px;
+        height: 680px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 18px;
+        background: #1c1c1f;
+        border: 1px solid #2c2c32;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+      }
+      .chat header { padding: 16px 20px; border-bottom: 1px solid #2c2c32; font-weight: 600; }
+      .chat header small { color: #ff424d; margin-left: 8px; font-weight: 700; }
+      .list { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 14px; padding: 18px 20px 104px; }
+      .msg { display: flex; gap: 10px; align-items: flex-start; }
+      .avatar { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: #141416; }
+      .body { min-width: 0; }
+      .name { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #a1a1aa; margin-bottom: 4px; }
+      .name .p7tv-author { color: #e4e4e7; font-weight: 600; }
+      .bubble { display: inline-block; padding: 8px 12px; border-radius: 14px; background: #2a2a30; }
+      .p7tv-reply-btn { color: #e4e4e7; }
+      .composer { position: relative; padding: 14px 20px 20px; border-top: 1px solid #2c2c32; }
+      .composer .field { padding: 12px 14px; border-radius: 12px; background: #101012; border: 1px solid #3a3a42; }
+      .caret { display: inline-block; width: 2px; height: 18px; margin-left: 1px; vertical-align: -3px; background: #f4f4f5; }
+      .p7tv-autocomplete { position: absolute; left: 20px; bottom: 74px; width: 260px; }
+      .p7tv-ac-item.is-active { background: rgba(255, 66, 77, 0.22); }
+      .ac-dot { width: 22px; height: 22px; border-radius: 50%; }
+    </style>
+  </head>
+  <body>
+    <section class="pitch">
+      <h1>Patreon Live Chat<span>+</span></h1>
+      <p>Quelques outils en plus dans le chat des lives Patreon, visibles uniquement pour toi.</p>
+      <ul>
+        <li><b>↩</b> Un bouton pour répondre à un message</li>
+        <li><b>@</b> Les pseudos se complètent pendant la saisie</li>
+        <li><b>★</b> Les messages qui te répondent sont mis en avant</li>
+        <li><b>☺</b> Les émotes 7TV de tes streameurs Twitch</li>
+      </ul>
+    </section>
+
+    <section class="chat">
+      <header>Chat du live <small>● EN DIRECT</small></header>
+      <div class="list">
+        <div class="msg">
+          <div class="avatar" style="background:#a5b4fc">H</div>
+          <div class="body">
+            <div class="name"><span class="p7tv-author">Hugo</span><button class="p7tv-reply-btn">Répondre</button></div>
+            <div class="bubble">Le son est enfin réglé
+              <img class="p7tv-emote" style="--p7tv-emote-size:36px" src="https://cdn.7tv.app/emote/01GAZ199Z8000FEWHS6AT5QZV0/2x.webp" alt="peepoHappy" />
+            </div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="avatar" style="background:#fcd34d">A</div>
+          <div class="body">
+            <div class="name"><span class="p7tv-author">Alex Martin</span><button class="p7tv-reply-btn">Répondre</button></div>
+            <div class="bubble">Quelqu'un a le lien de la playlist ?</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="avatar" style="background:#86efac">L</div>
+          <div class="body">
+            <div class="name"><span class="p7tv-author">Léa</span><button class="p7tv-reply-btn">Répondre</button></div>
+            <div class="bubble p7tv-reply-bubble"><span class="p7tv-mention">@Alex Martin</span> elle est dans la description
+              <img class="p7tv-emote" style="--p7tv-emote-size:36px" src="https://cdn.7tv.app/emote/01GB4CK01800090V9B3D8CGEEX/2x.webp" alt="EZ" />
+            </div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="avatar" style="background:#f9a8d4">S</div>
+          <div class="body">
+            <div class="name"><span class="p7tv-author">Sam</span><button class="p7tv-reply-btn">Répondre</button></div>
+            <div class="bubble">Quel set incroyable
+              <img class="p7tv-emote" style="--p7tv-emote-size:36px" src="https://cdn.7tv.app/emote/01GAM8EFQ00004MXFXAJYKA859/2x.webp" alt="Clap" />
+              <img class="p7tv-emote" style="--p7tv-emote-size:36px" src="https://cdn.7tv.app/emote/01GAM8EFQ00004MXFXAJYKA859/2x.webp" alt="Clap" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="composer">
+        <div class="p7tv-autocomplete">
+          <button class="p7tv-ac-item is-active"><span class="ac-dot" style="background:#86efac"></span>Léa</button>
+          <button class="p7tv-ac-item"><span class="ac-dot" style="background:#c4b5fd"></span>Léon</button>
+        </div>
+        <div class="field">Merci <b>@Lé</b><span class="caret"></span></div>
+      </div>
+    </section>
+  </body>
+</html>
